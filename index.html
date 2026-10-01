@@ -28,7 +28,7 @@
 
   .heart-target {
     position: absolute;
-    top: 25%;
+    top: 22%;
     left: 50%;
     transform: translateX(-50%);
     font-size: 130px;
@@ -479,9 +479,12 @@
   /* ================= HALAMAN 5 / PESAN PANJANG ================= */
   #page5 {
     background: linear-gradient(180deg, #f4f9ff 0%, #eaf3ff 55%, #dcecff 100%);
-    padding: 34px 20px 70px;
+    padding: 58px 20px 70px;
     overflow-y: auto;
+    overflow-x: hidden;
+    justify-content: flex-start;
     text-align: left;
+    box-sizing: border-box;
   }
   .final-message-wrap {
     width: min(92vw, 720px);
@@ -511,6 +514,11 @@
     font-size: 24px;
     font-weight: 700;
     margin-top: 25px;
+  }
+
+  @media (max-width: 600px) {
+    #page5 { padding: 52px 14px 60px; }
+    .final-message-title { font-size: clamp(24px, 7vw, 34px); line-height: 1.25; }
   }
 
   /* Tombol kejutan lucu di kiri bawah */
@@ -762,8 +770,8 @@ function resize() {
 resize();
 window.addEventListener('resize', resize);
 
-const bowX = 90;
-const bowY = () => H - 130;
+const bowX = () => Math.min(145, Math.max(110, W * 0.30));
+const bowY = () => H - Math.max(165, Math.min(205, H * 0.20));
 
 let arrow = { x: bowX + 20, y: 0, vx: 0, vy: 0, angle: 0, flying: false, stuck: false };
 let isDragging = false;
@@ -776,7 +784,7 @@ const POWER = 0.22;
 const GRAVITY = 0.35;
 
 function initArrow() {
-  arrow.x = bowX + 20;
+  arrow.x = bowX() + 20;
   arrow.y = bowY() - 20;
   arrow.vx = 0; arrow.vy = 0;
   arrow.angle = 0;
@@ -834,7 +842,7 @@ function endDrag() {
   const dy = dragStart.y - dragCurrent.y;
   const len = Math.hypot(dx, dy);
   if (len < MIN_PULL) {
-    arrow.x = bowX + 20;
+    arrow.x = bowX() + 20;
     arrow.y = bowY() - 20;
     arrow.angle = 0;
     return;
@@ -873,7 +881,7 @@ function update() {
 function resetArrow() { setTimeout(() => { initArrow(); }, 300); }
 
 function drawBow() {
-  const x = bowX, y = bowY();
+  const x = bowX(), y = bowY();
   ctx.save();
   ctx.translate(x, y);
   ctx.strokeStyle = '#8B5A2B';
@@ -905,29 +913,29 @@ function drawArrow() {
   ctx.lineWidth = 4;
   ctx.lineCap = 'round';
   ctx.beginPath();
-  ctx.moveTo(-50, 0);
-  ctx.lineTo(30, 0);
+  ctx.moveTo(-56, 0);
+  ctx.lineTo(34, 0);
   ctx.stroke();
 
   ctx.fillStyle = '#C0C0C0';
   ctx.beginPath();
   ctx.moveTo(30, 0);
-  ctx.lineTo(48, -6);
-  ctx.lineTo(48, 6);
+  ctx.lineTo(54, -7);
+  ctx.lineTo(54, 7);
   ctx.closePath();
   ctx.fill();
 
   ctx.fillStyle = '#ff8fb1';
   ctx.beginPath();
   ctx.moveTo(-50, 0);
-  ctx.lineTo(-60, -8);
-  ctx.lineTo(-42, 0);
+  ctx.lineTo(-67, -9);
+  ctx.lineTo(-47, 0);
   ctx.closePath();
   ctx.fill();
   ctx.beginPath();
   ctx.moveTo(-50, 0);
-  ctx.lineTo(-60, 8);
-  ctx.lineTo(-42, 0);
+  ctx.lineTo(-67, 9);
+  ctx.lineTo(-47, 0);
   ctx.closePath();
   ctx.fill();
   ctx.restore();
